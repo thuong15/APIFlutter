@@ -26,11 +26,6 @@ namespace project4.model
 		public DateTime? DeletedTime { get; set; }
 		public bool IsDeleted { get; set; }
 
-		public virtual Categories? Categories { get; set; }
-		public virtual Topic? Topic { get; set; }
-		public virtual ICollection<History> Histories { get; set; } = new List<History>();
-		public virtual ICollection<Question> Questions { get; set; } = new List<Question>();
-
 
 	}
 }

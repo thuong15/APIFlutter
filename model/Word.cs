@@ -27,6 +27,5 @@ namespace project4.model
 		public DateTime? UpdatedTime { get; set; }
 		public DateTime? DeletedTime { get; set; }
 		public bool IsDeleted { get; set; }
-		public virtual ICollection<Example> Examples { get; set; } = new List<Example>();
 	}
 }
