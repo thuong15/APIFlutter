@@ -16,6 +16,8 @@ namespace project4.model
 		public string Description { get; set; }
 		public int CategoriesId { get; set; }
 		[StringLength(maximumLength: 100)]
+		public string Avatar { get; set; }
+		[StringLength(maximumLength: 100)]
 		public string CreatedBy { get; set; }
 		[StringLength(maximumLength: 100)]
 		public string UpdatedBy { get; set; }

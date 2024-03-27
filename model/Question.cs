@@ -23,8 +23,6 @@ namespace project4.model
 		public DateTime? UpdatedTime { get; set; }
 		public DateTime? DeletedTime { get; set; }
 		public bool IsDeleted { get; set; }
-		public virtual Lesson? Lessons { get; set; }
-		public virtual ICollection<Answer> Answers { get; set; } = new List<Answer>();
 
 	}
 }

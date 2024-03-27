@@ -26,11 +26,6 @@ namespace project4.Controllers
                             Name = a.Name
                         }).ToList();
 
-            //if (data == null || !data.Any())
-            //{
-            //    return NotFound();
-            //}
-
             var result = new
             {
                 stt = data.Count() + 1
@@ -38,6 +33,30 @@ namespace project4.Controllers
 
             return Ok(result);
         }
+        [HttpPost("GetListLesson")]
+        public async Task<IActionResult> GetListLesson([FromBody] ItemGetListLesson model)
+        {
+            var result = from a in _context.Lesson.Where(x => x.IsDeleted == false)
+                         select new
+                         {
+                             id = a.ID,
+                             title = a.Name,
+                             img = a.Avatar,
+                             sttLesson = "Bài học số 40",
+                             totalStar = 2,
+                         };
 
+            return Ok(result);
+        }
+        [HttpPost("GetDay")]
+        public async Task<IActionResult> GetDay([FromBody] Item model)
+        {
+            var result = new
+            {
+                totalDay = '3'
+            };
+
+            return Ok(result);
+        }
     }
 }
