@@ -12,6 +12,10 @@ namespace project4.model
 
 		[StringLength(maximumLength: 100)]
 		public string Name { get; set; }
+
+		[StringLength(maximumLength: 500)]
+		public string Avatar { get; set; }
+
 		[StringLength(maximumLength: 500)]
 		public string Description { get; set; }
 		public string CreatedBy { get; set; }
