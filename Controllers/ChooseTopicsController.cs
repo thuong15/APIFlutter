@@ -19,7 +19,7 @@ namespace project4.Controllers
         public async Task<IActionResult> GetListTopic([FromBody] Item model)
         {
             var result = from a in _context.Topic.Where(x => !x.IsDeleted)
-                         join b in _context.Lesson.Where(x => !x.IsDeleted) on a.ID equals b.TopicId
+                         join b in _context.Lesson.Where(x => !x.IsDeleted) on a.Code equals b.TopicCode
                          group a by a.ID into g
                          select new
                          {

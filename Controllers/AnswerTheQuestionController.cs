@@ -29,7 +29,7 @@ namespace project4.Controllers
 		public async Task<IActionResult> GetDataAnswer()
 		{
 
-			var Listanswer = _context.Answer.Where(z => z.IsDeleted == false && z.QuestionId == 1)
+			var Listanswer = _context.Answer.Where(z => z.IsDeleted == false && z.QuestionCode == "1")
 											.Select(x => new { answer = x.Name, x.IsTrue });
 			return Ok(Listanswer);
 		}
