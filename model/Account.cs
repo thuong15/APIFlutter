@@ -9,6 +9,8 @@ namespace project4.model
 		[Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public int? ID { get; set; }
 		[StringLength(maximumLength: 100)]
+		public string Code { get; set; }
+		[StringLength(maximumLength: 100)]
 		public string UserName { get; set; }
 		[StringLength(maximumLength: 100)]
 		public string Password { get; set; }

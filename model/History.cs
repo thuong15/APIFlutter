@@ -8,7 +8,10 @@ namespace project4.model
 	{
 		[Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public int ID { get; set; }
-		public int LessonId { get; set; }
+		[StringLength(maximumLength: 100)]
+		public String Code { get; set; }
+		[StringLength(maximumLength: 100)]
+		public String LessonCode { get; set; }
 		[StringLength(maximumLength: 20)]
 		public string QuantityCorrect { get; set; }
 		[StringLength(maximumLength: 100)]

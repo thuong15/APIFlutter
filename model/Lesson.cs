@@ -8,19 +8,27 @@ namespace project4.model
 	{
 		[Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public int ID { get; set; }
-		public int TopicId { get; set; }
+
+		[StringLength(maximumLength: 100)]
+		public String Code { get; set; }
+
+		[StringLength(maximumLength: 100)]
+		public String TopicCode { get; set; }
 
 		[StringLength(maximumLength: 100)]
 		public string Name { get; set; }
 		[StringLength(maximumLength: 500)]
 		public string Description { get; set; }
-		public int CategoriesId { get; set; }
+		
 		[StringLength(maximumLength: 100)]
 		public string Avatar { get; set; }
+
 		[StringLength(maximumLength: 100)]
 		public string CreatedBy { get; set; }
+
 		[StringLength(maximumLength: 100)]
 		public string UpdatedBy { get; set; }
+
 		[StringLength(maximumLength: 100)]
 		public string DeletedBy { get; set; }
 		public DateTime? CreatedTime { get; set; }

@@ -9,6 +9,8 @@ namespace project4.model
 		[Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public int ID { get; set; }
 		[StringLength(maximumLength: 100)]
+		public string Code { get; set; }
+		[StringLength(maximumLength: 100)]
 		public string Name { get; set; }
 		[StringLength(maximumLength: 100)]
 		public string CreatedBy { get; set; }
