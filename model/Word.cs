@@ -18,11 +18,9 @@ namespace project4.model
 		public string NameVN { get; set; }
 		[StringLength(maximumLength: 255)]
 		public string NameEN { get; set; }
+		[StringLength(maximumLength: 255)]
+		public string Avatar { get; set; }
 		public int Count { get; set; }
-<<<<<<< HEAD
-
-=======
->>>>>>> 603a0e41b9c0af361a21fb5c6a232bead1e1ac58
 		[StringLength(maximumLength: 100)]
 		public string CreatedBy { get; set; }
 
