@@ -12,7 +12,7 @@ namespace project4.model
 		public string Code { get; set; }
 
 		[StringLength(maximumLength: 100)]
-		public string LesonCode { get; set; }
+		public string LessonCode { get; set; }
 
 		[StringLength(maximumLength: 255)]
 		public string NameVN { get; set; }

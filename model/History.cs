@@ -11,9 +11,13 @@ namespace project4.model
 		[StringLength(maximumLength: 100)]
 		public String Code { get; set; }
 		[StringLength(maximumLength: 100)]
+		public String UserCode { get; set; }
+		[StringLength(maximumLength: 100)]
+		public String WordCode { get; set; }
+		[StringLength(maximumLength: 100)]
+		public String QuestionCode { get; set; }
+		[StringLength(maximumLength: 100)]
 		public String LessonCode { get; set; }
-		[StringLength(maximumLength: 20)]
-		public string QuantityCorrect { get; set; }
 		[StringLength(maximumLength: 100)]
 		public string CreatedBy { get; set; }
 		[StringLength(maximumLength: 100)]
@@ -23,6 +27,7 @@ namespace project4.model
 		public DateTime? CreatedTime { get; set; }
 		public DateTime? UpdatedTime { get; set; }
 		public DateTime? DeletedTime { get; set; }
+		public bool Status { get; set; }
 		public bool IsDeleted { get; set; }
 	}
 }
