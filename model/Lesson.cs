@@ -19,7 +19,6 @@ namespace project4.model
 		public string Name { get; set; }
 		[StringLength(maximumLength: 500)]
 		public string Description { get; set; }
-		
 		[StringLength(maximumLength: 100)]
 		public string Avatar { get; set; }
 
@@ -35,7 +34,5 @@ namespace project4.model
 		public DateTime? UpdatedTime { get; set; }
 		public DateTime? DeletedTime { get; set; }
 		public bool IsDeleted { get; set; }
-
-
 	}
 }

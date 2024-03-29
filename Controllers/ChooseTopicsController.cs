@@ -18,15 +18,18 @@ namespace project4.Controllers
         [HttpPost("GetListTopic")]
         public async Task<IActionResult> GetListTopic([FromBody] Item model)
         {
-            var result = from a in _context.Topic.Where(x => x.IsDeleted == false)
-                        select new
-                        {
-                            title = a.Name,
-                            img = a.Avatar,
-                            comboColor = a.ComboColor,
-                            compleLesson = 15,
-                            totalLesson = 30
-                        };
+            var result = from a in _context.Topic.Where(x => !x.IsDeleted)
+                         join b in _context.Lesson.Where(x => !x.IsDeleted) on a.ID equals b.TopicId
+                         group a by a.ID into g
+                         select new
+                         {
+                             id = g.Key,
+                             title = g.First().Name,
+                             img = g.First().Avatar,
+                             comboColor = g.First().ComboColor,
+                             compleLesson = 1,
+                             totalLesson = g.Count()
+                         };
 
             return Ok(result);
         }
