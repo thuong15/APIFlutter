@@ -14,7 +14,6 @@ namespace project4.model
 		public string Name { get; set; }
 		[StringLength(maximumLength: 500)]
 		public string Description { get; set; }
-		public int CategoriesId { get; set; }
 		[StringLength(maximumLength: 100)]
 		public string Avatar { get; set; }
 		[StringLength(maximumLength: 100)]

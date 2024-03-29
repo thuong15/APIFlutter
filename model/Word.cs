@@ -13,10 +13,7 @@ namespace project4.model
 		public string NameVN { get; set; }
 		[StringLength(maximumLength: 255)]
 		public string NameEN { get; set; }
-		[StringLength(maximumLength: 255)]
-		public string Type { get; set; }
-		public int TimeStudied { get; set; }
-		public bool IsRememory { get; set; }
+		public int Count { get; set; }
 		[StringLength(maximumLength: 100)]
 		public string CreatedBy { get; set; }
 		[StringLength(maximumLength: 100)]
