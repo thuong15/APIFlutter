@@ -18,17 +18,6 @@ namespace project4.Controllers
         [HttpPost("GetListTopic")]
         public async Task<IActionResult> GetListTopic([FromBody] Item model)
         {
-            var result10 = from a in _context.Lesson.Where(x => !x.IsDeleted)
-                          join b in _context.Word.Where(x => !x.IsDeleted) on a.Code equals b.LessonCode into words
-                          join c in _context.Question.Where(x => !x.IsDeleted) on a.Code equals c.LessonCode into questions
-                          join d in _context.History.Where(x => !x.IsDeleted) on a.Code equals d.LessonCode into history
-                          select new
-                          {
-                              TopicCode = a.TopicCode,
-                              LessonCode = a.Code,
-                              isCompleted = words.Count() + questions.Count() == history.Count()
-                          };
-
             var test = from a in _context.Lesson.Where(x => !x.IsDeleted)
                        select new
                        {
@@ -37,12 +26,19 @@ namespace project4.Controllers
                            Count = _context.Word.Count(b => b.LessonCode == a.Code && !b.IsDeleted) + _context.Question.Count(b => b.LessonCode == a.Code && !b.IsDeleted)
                        };
 
-            var test1 = from a in _context.History.Where(x => !x.IsDeleted)
-                        group a by a.LessonCode into g
+            var test1 = from a in _context.Lesson.Where(x => !x.IsDeleted)
+                        join b in _context.History.Where(x => !x.IsDeleted) on a.Code equals b.LessonCode into c
+                        from b in c.DefaultIfEmpty()
                         select new
                         {
-                            LessonCode = g.Key,
-                            Count = g.Count(),
+                            a.Code,
+                            count = b != null ? 1 : 0
+                        } into d
+                        group d by d.Code into h
+                        select new
+                        {
+                            LessonCode = h.Key,
+                            Count = h.Sum(item => item.count)
                         };
 
             var result1 = from t in test
@@ -50,8 +46,16 @@ namespace project4.Controllers
                           select new
                           {
                               TopicCode = t.TopicCode,
-                              LessonCode = t.LessonCode,
-                              isCompleted = t.Count == h.Count
+                              LessonCode = t.LessonCode,    
+                              count = h.Count != 0 ? t.Count == h.Count ? 1 : 0 : 0
+                          }
+                          into c
+                          group c by c.TopicCode into g
+                          select new
+                          {
+                              TopicCode = g.Key,
+                              LessonCode = g.Count(),
+                              Count = g.Sum(item => item.count)
                           };
 
             var result = from a in _context.Topic.Where(x => !x.IsDeleted)
@@ -61,10 +65,21 @@ namespace project4.Controllers
                          {
                              id = g.Key,
                              title = g.First().Name,
+                             topicCode = g.First().Code,
                              img = g.First().Avatar,
                              comboColor = g.First().ComboColor,
                              compleLesson = 1,
                              totalLesson = g.Count()
+                         } into c
+                         join d in result1 on c.topicCode equals d.TopicCode
+                         select new
+                         {
+                             id = c.id,
+                             title = c.title,
+                             img = c.img,
+                             comboColor = c.comboColor,
+                             totalLesson = c.totalLesson,
+                             compleLesson = d.Count
                          };
 
             return Ok(result);
