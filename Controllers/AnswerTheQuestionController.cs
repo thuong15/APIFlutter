@@ -28,8 +28,7 @@ namespace project4.Controllers
 		[HttpPost("GetDataAnswer")]
 		public async Task<IActionResult> GetDataAnswer()
 		{
-
-			var Listanswer = _context.Answer.Where(z => z.IsDeleted == false && z.QuestionCode == "1")
+			var Listanswer = _context.Answer.Where(z => z.IsDeleted == false && z.QuestionCode == "Q_GD_1")
 											.Select(x => new { answer = x.Name, x.IsTrue });
 			return Ok(Listanswer);
 		}

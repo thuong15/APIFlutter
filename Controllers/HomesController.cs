@@ -37,29 +37,50 @@ namespace project4.Controllers
         [HttpPost("GetListLesson")]
         public async Task<IActionResult> GetListLesson([FromBody] ItemGetListLesson model)
         {
-            var data = from a in _context.Topic.Where(x => !x.IsDeleted && x.Code == model.CodeTopic)
+            var check = from a in _context.Lesson.Where(x => !x.IsDeleted)
+                       select new
+                       {
+                           LessonCode = a.Code,
+                           TopicCode = a.TopicCode,
+                           Count = _context.Word.Count(b => b.LessonCode == a.Code && !b.IsDeleted) + _context.Question.Count(b => b.LessonCode == a.Code && !b.IsDeleted)
+                       };
+
+            var check1 = from a in _context.Topic.Where(x => !x.IsDeleted && x.Code == model.CodeTopic)
                        join b in _context.Lesson.Where(x => !x.IsDeleted) on a.Code equals b.TopicCode
                        join c in _context.History.Where(x => !x.IsDeleted && x.IsNew) on b.Code equals c.LessonCode into d
                        from c in d.DefaultIfEmpty()
                        select new
                        {
-                           id = b.ID,
-                           title = b.Name,
-                           img = a.Avatar,
-                           totalStar = 2,
-                           test = c.Status ? "D" : "S",
+                           code = b.Code,
+                           count = c.Status ? 1 : 0,
                            wCode = c.WordCode,
                            qCode = c.QuestionCode
+                       } into e
+                       group e by e.code into h
+                       select new
+                       {
+                           Code = h.Key,
+                           Count = h.Sum(x=>x.count),
                        };
+
+            var data = from a in check
+                          join b in check1 on a.LessonCode equals b.Code
+                          select new
+                          {
+                              a.LessonCode,
+                              totalStar = b.Count == 0 ? 0 : a.Count == b.Count ? 3 : ((b.Count / a.Count) * 100) > 60 ? 2 : 1,
+                          };
 
             var result = from a in _context.Topic.Where(x => !x.IsDeleted && x.Code == model.CodeTopic)
                          join b in _context.Lesson.Where(x => !x.IsDeleted) on a.Code equals b.TopicCode
+                         join c in data on b.Code equals c.LessonCode
                          select new
                          {
                              id = b.ID,
+                             code = b.Code,
                              title = b.Name,
-                             img = a.Avatar,
-                             totalStar = 2
+                             img = b.Avatar,
+                             totalStar = c.totalStar
                          };
 
 

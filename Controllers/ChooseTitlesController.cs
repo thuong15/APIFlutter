@@ -20,9 +20,22 @@ namespace project4.Controllers
         {
             var result = new
             {
-                totalWord = 10,
-                totalQuestion = 10,
-                totalPuzzle = 10,
+                totalWord = _context.Word.Where(x => !x.IsDeleted && x.LessonCode == model.Code).Count(),
+                totalQuestion = (from a in _context.Question.Where(x => !x.IsDeleted && x.LessonCode == model.Code)
+                                 join b in _context.Answer.Where(x=>!x.IsDeleted) on a.Code equals b.QuestionCode
+                                 where b!= null
+                                 select new
+                                 {
+                                     a.Code
+                                 }).Count(),
+                totalPuzzle = (from a in _context.Question.Where(x => !x.IsDeleted && x.LessonCode == model.Code)
+                               join b in _context.Answer.Where(x => !x.IsDeleted) on a.Code equals b.QuestionCode into c
+                               from b in c.DefaultIfEmpty()
+                               where b == null
+                               select new
+                               {
+                                   a.Code
+                               }).Count(),
             };
             return Ok(result);
         }
