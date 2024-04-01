@@ -6,11 +6,11 @@
     }
     public class Item
     {
-        public int Id { get; set; }
+        public string Code { get; set; }
     }
     public class ItemGetListLesson
     {
-        public int IdUser { get; set; }
-        public int IdTopic { get; set; }
+        public string CodeUser { get; set; }
+        public string CodeTopic { get; set; }
     }
 }

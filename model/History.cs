@@ -28,6 +28,7 @@ namespace project4.model
 		public DateTime? UpdatedTime { get; set; }
 		public DateTime? DeletedTime { get; set; }
 		public bool Status { get; set; }
+		public bool IsNew { get; set; }
 		public bool IsDeleted { get; set; }
 	}
 }

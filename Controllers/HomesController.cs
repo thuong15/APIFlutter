@@ -20,7 +20,8 @@ namespace project4.Controllers
         [HttpPost("GetSttTopic")]
         public async Task<IActionResult> GetSttTopic([FromBody] Item model)
         {
-            var data = (from a in _context.Topic.Where(x => x.IsDeleted == false && x.ID < model.Id)
+            var topic = _context.Topic.FirstOrDefault(x => !x.IsDeleted && x.Code == model.Code);
+            var data = (from a in _context.Topic.Where(x => x.IsDeleted == false && x.ID < topic.ID)
                         select new
                         {
                             Name = a.Name
@@ -36,15 +37,31 @@ namespace project4.Controllers
         [HttpPost("GetListLesson")]
         public async Task<IActionResult> GetListLesson([FromBody] ItemGetListLesson model)
         {
-            var result = from a in _context.Lesson.Where(x => x.IsDeleted == false)
+            var data = from a in _context.Topic.Where(x => !x.IsDeleted && x.Code == model.CodeTopic)
+                       join b in _context.Lesson.Where(x => !x.IsDeleted) on a.Code equals b.TopicCode
+                       join c in _context.History.Where(x => !x.IsDeleted && x.IsNew) on b.Code equals c.LessonCode into d
+                       from c in d.DefaultIfEmpty()
+                       select new
+                       {
+                           id = b.ID,
+                           title = b.Name,
+                           img = a.Avatar,
+                           totalStar = 2,
+                           test = c.Status ? "D" : "S",
+                           wCode = c.WordCode,
+                           qCode = c.QuestionCode
+                       };
+
+            var result = from a in _context.Topic.Where(x => !x.IsDeleted && x.Code == model.CodeTopic)
+                         join b in _context.Lesson.Where(x => !x.IsDeleted) on a.Code equals b.TopicCode
                          select new
                          {
-                             id = a.ID,
-                             title = a.Name,
+                             id = b.ID,
+                             title = b.Name,
                              img = a.Avatar,
-                             sttLesson = "Bài học số 40",
-                             totalStar = 2,
+                             totalStar = 2
                          };
+
 
             return Ok(result);
         }

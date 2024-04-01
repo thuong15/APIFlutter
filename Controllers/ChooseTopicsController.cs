@@ -27,7 +27,7 @@ namespace project4.Controllers
                        };
 
             var test1 = from a in _context.Lesson.Where(x => !x.IsDeleted)
-                        join b in _context.History.Where(x => !x.IsDeleted) on a.Code equals b.LessonCode into c
+                        join b in _context.History.Where(x => !x.IsDeleted && x.IsNew) on a.Code equals b.LessonCode into c
                         from b in c.DefaultIfEmpty()
                         select new
                         {
