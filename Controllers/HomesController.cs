@@ -52,7 +52,7 @@ namespace project4.Controllers
                        select new
                        {
                            code = b.Code,
-                           count = c.Status ? 1 : 0,
+                           count = c.IsCorrect ? 1 : 0,
                            wCode = c.WordCode,
                            qCode = c.QuestionCode
                        } into e

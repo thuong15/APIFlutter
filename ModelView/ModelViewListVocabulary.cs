@@ -5,6 +5,11 @@
 	}
 	public class ModelItem
 	{
-		public int IdUser { get; set; }
+		public string CodeUser { get; set; }
+		public bool IsRemomerize { get; set; }
+	}
+	public class ItemInfoTotalWord
+    {
+		public string CodeUser { get; set; }
 	}
 }

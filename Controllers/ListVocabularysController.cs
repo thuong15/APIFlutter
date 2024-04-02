@@ -24,26 +24,78 @@ namespace project4.Controllers
         [HttpPost("ListWords")]
         public async Task<IActionResult> ListWords([FromBody] ModelItem modelItem)
         {
-            var data = _context.Word.Where(x => x.IsDeleted == false).Select(x => new
-            {
-                x.NameVN,
-                x.ID,
-                x.NameEN,
-				wordCount = 5,
-				wordTotalCount =5,
-			});
-			return Ok(data);
+            var data = from a in _context.Word.Where(x => !x.IsDeleted)
+                       select new
+                       {
+                           a.Code,
+                           a.Count,
+                           a.NameEN,
+                       };
+            var check = from a in _context.History.Where(x => !x.IsDeleted && x.IsCorrect && x.QuestionCode == "" && x.UserCode == modelItem.CodeUser)
+                        group a by a.WordCode into b
+                        select new
+                        {
+                            b.First().Code,
+                            WCode = b.Key,
+                            Count = b.Count()
+                        };
+
+            var result = (from a in data
+                         join b in check on a.Code equals b.WCode
+                         select new
+                         {
+                             a.Code,
+                             wordTotalCount = a.Count,
+                             wordCount = b.Count,
+                             IsRemomerize = a.Count == b.Count,
+                             NameEN = char.ToUpper(a.NameEN.FirstOrDefault()) + a.NameEN.Substring(1)
+                         } into c
+                         where c.IsRemomerize == modelItem.IsRemomerize
+                         select new
+                         {
+                             c.Code,
+                             c.NameEN,
+                             c.wordTotalCount,
+                             c.wordCount
+                         }).ToList();
+
+            // Action InfoTotalWord using
+            return Ok(result);
         }
-        [HttpGet("Totalnumber")]
-        public async Task<IActionResult> Totalnumber()
+        [HttpPost("InfoTotalWord")]
+        public async Task<IActionResult> InfoTotalWord([FromBody] ItemInfoTotalWord modelItem)
         {
+            dynamic listWordLearning = await ListWords(new ModelItem { CodeUser = modelItem.CodeUser, IsRemomerize = false });
+            dynamic listWordLearned = await ListWords(new ModelItem { CodeUser = modelItem.CodeUser, IsRemomerize = true });
+
+            int countListWordLearning = 0;
+            if (listWordLearning != null && listWordLearning.Value != null)
+            {
+                countListWordLearning = listWordLearning.Value.Count;
+            }
+
+            int countListWordLearned = 0;
+            if (listWordLearned != null && listWordLearned.Value != null)
+            {
+                countListWordLearned = listWordLearned.Value.Count;
+            }
+
+            var data = from a in _context.History.Where(x => !x.IsDeleted && x.UserCode == modelItem.CodeUser && x.WordCode != "")
+                       group a by a.WordCode into b
+                       select new
+                       {
+                           b.Key,
+                       };
+
             var result = new
             {
-                totalNumber = 40,
-				wordsLearned = 30,
-				wordsBeingStudied = 10,
-			};
-			return Ok(result);
+                totalNumber = data.Count(),
+                wordsLearned = countListWordLearning,
+                wordsBeingStudied = countListWordLearned
+            };
+
+            return Ok(result);
         }
-	}
+
+    }
 }

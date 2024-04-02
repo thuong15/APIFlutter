@@ -58,29 +58,31 @@ namespace project4.Controllers
                               Count = g.Sum(item => item.count)
                           };
 
-            var result = from a in _context.Topic.Where(x => !x.IsDeleted)
-                         join b in _context.Lesson.Where(x => !x.IsDeleted) on a.Code equals b.TopicCode
-                         group a by a.ID into g
-                         select new
-                         {
-                             id = g.Key,
-                             title = g.First().Name,
-                             topicCode = g.First().Code,
-                             img = g.First().Avatar,
-                             comboColor = g.First().ComboColor,
-                             compleLesson = 1,
-                             totalLesson = g.Count()
-                         } into c
-                         join d in result1 on c.topicCode equals d.TopicCode
-                         select new
-                         {
-                             id = c.id,
-                             title = c.title,
-                             img = c.img,
-                             comboColor = c.comboColor,
-                             totalLesson = c.totalLesson,
-                             compleLesson = d.Count
-                         };
+            var result = (from a in _context.Topic.Where(x => !x.IsDeleted)
+                          join b in _context.Lesson.Where(x => !x.IsDeleted) on a.Code equals b.TopicCode
+                          group a by a.ID into g
+                          select new
+                          {
+                              id = g.Key,
+                              codeTopic = g.First().Code,
+                              title = g.First().Name,
+                              topicCode = g.First().Code,
+                              img = g.First().Avatar,
+                              comboColor = g.First().ComboColor,
+                              totalLesson = g.Count()
+                          } into c
+                          join d in result1 on c.topicCode equals d.TopicCode
+                          select new
+                          {
+                              id = c.id,
+                              title = c.title,
+                              codeTopic = c.codeTopic,
+                              img = c.img,
+                              comboColor = c.comboColor,
+                              totalLesson = c.totalLesson,
+                              compleLesson = d.Count
+                          }).OrderBy(c => c.id);
+
 
             return Ok(result);
         }

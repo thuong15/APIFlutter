@@ -17,6 +17,11 @@ namespace project4.Controllers
 		[HttpPost("getDataQuestion")]
 		public async Task<IActionResult> getDataQuestion([FromBody] ItemGetDataQuestion model)
 		{
+			var check = (from a in _context.Word.Where(x => !x.IsDeleted && x.LessonCode == model.Code)
+						select new
+						{
+							a.Code
+						}).ToList()[model.Stt];
 			var data = (from a in _context.Word.Where(x => !x.IsDeleted)
 						select new ItemAnswer
                         {
@@ -26,8 +31,9 @@ namespace project4.Controllers
 							IsCorrect = false
 						}).ToList();
 
-			data[model.Stt].IsCorrect = true;
-            List<int> test = randomAnswer(data.Count(), model.Stt).Result;
+            int index = data.FindIndex(x => x.Code == check.Code);
+
+            List<int> test = randomAnswer(data.Count(), index).Result;
 
             List<ItemAnswer> listAnswer = new List<ItemAnswer>();
 
