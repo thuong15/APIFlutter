@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using project4.model;
+using project4.ModelView;
 using System.Runtime.InteropServices;
 
 namespace project4.Controllers
@@ -16,21 +17,65 @@ namespace project4.Controllers
 			_context = context;
 		}
 		[HttpPost("GetDataQuestion")]
-		public async Task<IActionResult> GetDataQuestion()
+		public async Task<IActionResult> GetDataQuestion([FromBody] ModelViewAnswerTheQuestion item)
 		{
-			var data = _context.Question.Where(x => x.IsDeleted == false).Select(x => new
-			{
-				question = x.Name,
-				avatar = x.Avatar,
-			});
+			var data = from a in _context.Lesson.Where(x => x.IsDeleted == false && x.Code == item.CodeLesson)
+					   join b in _context.Question.Where(x => x.IsDeleted == false) on a.Code equals b.LessonCode
+					   select new
+					   {
+						   code = b.Code,
+						   question = b.Name,
+						   avatar = b.Avatar,
+					   };
 			return Ok(data);
 		}
 		[HttpPost("GetDataAnswer")]
-		public async Task<IActionResult> GetDataAnswer()
+		public async Task<IActionResult> GetDataAnswer([FromBody] ModelViewAnswerTheQuestion item)
 		{
-			var Listanswer = _context.Answer.Where(z => z.IsDeleted == false && z.QuestionCode == "Q_GD_1")
-											.Select(x => new { answer = x.Name, x.IsTrue });
+			var Listanswer = (from a in _context.Lesson.Where(x => x.IsDeleted == false && x.Code == item.CodeLesson)
+							  join b in _context.Question.Where(x => x.IsDeleted == false) on a.Code equals b.LessonCode
+							  join c in _context.Answer.Where(x => x.IsDeleted == false) on b.Code equals c.QuestionCode
+							  group c by c.QuestionCode into grouped
+							  select new
+							  {
+								  Answers = grouped.Select(x => new { x.Name, x.IsTrue }).ToList()
+							  }).ToList();
 			return Ok(Listanswer);
 		}
+
+		[HttpPost("AddHistory")]
+		public async Task<IActionResult> AddHistory([FromBody] ModelViewAnswerTheQuestion item)
+		{
+			try
+			{
+				var check = _context.History.Where(x=> !x.IsDeleted).OrderByDescending(x=>x.ID).FirstOrDefault();
+				int id_max = check != null ? check.ID + 1 : 1;
+
+				string dataFlutter = item.CodeLesson;
+				string[] parts = dataFlutter.Split('_');
+				string CodeLesson = parts[1];
+
+				History itemm = new History()
+				{
+					Code = "H_" + CodeLesson + "_" + id_max,
+					LessonCode = item.CodeLesson,
+					IsCorrect = item.IsCorrect,
+					UserCode = item.UserCode,
+					WordCode = "",
+					QuestionCode="",
+					CreatedBy = "Admin",
+					CreatedTime = DateTime.Now,
+				};
+
+				_context.History.Add(itemm);
+			    _context.SaveChanges();
+		}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex.Message);
+			}
+			return Ok();
+		}
+
 	}
 }
