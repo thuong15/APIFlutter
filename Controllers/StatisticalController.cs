@@ -70,8 +70,8 @@ namespace project4.Controllers
                              {
                                  a.CreatedTime
                              }).ToList();
-            DateTime? startTime = checkTime[0].CreatedTime;
-            DateTime? endTime = checkTime[checkTime.Count() - 1].CreatedTime;
+            DateTime? startTime = checkTime.Count() > 0 ? checkTime[0].CreatedTime : DateTime.Today;
+            DateTime? endTime = checkTime.Count() > 0 ? checkTime[checkTime.Count() - 1].CreatedTime : DateTime.Today;
             TimeSpan? timeDifference = endTime - startTime;
 
             String time = "...";

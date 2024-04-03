@@ -6,7 +6,6 @@
     public class ItemGetDataQuestion
     {
         public string Code { get; set; }
-        public int Stt { get; set; }
     }
     public class ItemAnswer
     {
@@ -14,5 +13,11 @@
         public bool IsCorrect { get; set; }
         public string NameEN { get; set; }
         public string NameVN { get; set; }
+    }
+    public class ResultGetDataQuestion
+    {
+        public string Avatar { get; set; }
+        public string NameEN { get; set; }
+        public List<ItemAnswer> listAnswer { get; set; }
     }
 }
