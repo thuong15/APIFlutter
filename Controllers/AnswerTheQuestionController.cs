@@ -17,7 +17,7 @@ namespace project4.Controllers
 			_context = context;
 		}
 		[HttpPost("GetDataQuestion")]
-		public async Task<IActionResult> GetDataQuestion([FromBody] ModelViewAnswerTheQuestion item)
+		public async Task<IActionResult> GetDataQuestion([FromBody] ModelViewDataAnswer item)
 		{
 			var data = from a in _context.Lesson.Where(x => x.IsDeleted == false && x.Code == item.CodeLesson)
 					   join b in _context.Question.Where(x => x.IsDeleted == false) on a.Code equals b.LessonCode
@@ -30,7 +30,7 @@ namespace project4.Controllers
 			return Ok(data);
 		}
 		[HttpPost("GetDataAnswer")]
-		public async Task<IActionResult> GetDataAnswer([FromBody] ModelViewAnswerTheQuestion item)
+		public async Task<IActionResult> GetDataAnswer([FromBody] ModelViewDataAnswer item)
 		{
 			var Listanswer = (from a in _context.Lesson.Where(x => x.IsDeleted == false && x.Code == item.CodeLesson)
 							  join b in _context.Question.Where(x => x.IsDeleted == false) on a.Code equals b.LessonCode
@@ -48,7 +48,8 @@ namespace project4.Controllers
 		{
 			try
 			{
-				var check = _context.History.Where(x=> !x.IsDeleted).OrderByDescending(x=>x.ID).FirstOrDefault();
+				var check = _context.History.Where(x => x.IsDeleted == false).OrderByDescending(x => x.ID).FirstOrDefault();
+
 				int id_max = check != null ? check.ID + 1 : 1;
 
 				string dataFlutter = item.CodeLesson;
@@ -62,14 +63,23 @@ namespace project4.Controllers
 					IsCorrect = item.IsCorrect,
 					UserCode = item.UserCode,
 					WordCode = "",
-					QuestionCode="",
+					QuestionCode = item.CodeQuestion,
+					IsNew = true,
 					CreatedBy = "Admin",
+					UpdatedBy = "",
+					DeletedBy="",
 					CreatedTime = DateTime.Now,
 				};
 
 				_context.History.Add(itemm);
-			    _context.SaveChanges();
-		}
+
+				var dataHistory = _context.History.OrderByDescending(x=>x.ID).FirstOrDefault(x => x.IsDeleted == false && x.LessonCode == item.CodeLesson && x.QuestionCode == item.CodeQuestion);
+				if (dataHistory!=null)
+				{
+					dataHistory.IsNew = false;
+				}
+				_context.SaveChanges();
+			}
 			catch (Exception ex)
 			{
 				Console.WriteLine(ex.Message);
