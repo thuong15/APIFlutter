@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using project4.model;
+using project4.ModelView;
 
 namespace project4.Controllers
 {
@@ -47,5 +48,16 @@ namespace project4.Controllers
 
 			return Ok(result);
 		}
+
+		[HttpPost("GetAccountById")]
+		public async Task<IActionResult> GetAccountById([FromBody] Item model)
+		{
+			var result = _context.Account.Where(t=>t.Code==model.Code).ToList();
+			return Ok(result);
+		}
+
 	}
+
+	
+
 }
