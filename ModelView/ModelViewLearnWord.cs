@@ -11,6 +11,7 @@
     {
         public string Code { get; set; }
         public bool IsCorrect { get; set; }
+        public bool IsChoose { get; set; }
         public string NameEN { get; set; }
         public string NameVN { get; set; }
     }

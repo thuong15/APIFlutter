@@ -31,7 +31,8 @@ namespace project4.Controllers
                             Code = a.Code,
                             NameEN = a.NameEN,
                             NameVN = a.NameVN,
-                            IsCorrect = false
+                            IsCorrect = false,
+                            IsChoose = false
                         }).ToList();
 
             List<ItemAnswer> listAnswer = new List<ItemAnswer>();
@@ -39,7 +40,7 @@ namespace project4.Controllers
             foreach (var item in check)
             {
                 int index = data.FindIndex(x => x.Code == item.Code);
-
+                data[index].IsCorrect = true;
                 List<int> test = randomAnswer(data.Count(), index, totalAnswer).Result;
 
                 foreach (var i in test)

@@ -38,7 +38,7 @@ namespace project4.Controllers
 							  group c by c.QuestionCode into grouped
 							  select new
 							  {
-								  Answers = grouped.Select(x => new { x.Name, x.IsTrue }).ToList()
+								  Answers = grouped.Select(x => new { x.Name, x.IsTrue, IsChoose = false }).ToList()
 							  }).ToList();
 			return Ok(Listanswer);
 		}
