@@ -47,6 +47,7 @@ namespace project4.Controllers
                 {
                     listAnswer.Add(data[i]);
                 };
+                //data[index].IsCorrect = false;
             }
 
             var result = (from a in _context.Word.Where(x => !x.IsDeleted && x.LessonCode == model.Code)

@@ -23,18 +23,19 @@ namespace project4.Controllers
                 totalWord = _context.Word.Where(x => !x.IsDeleted && x.LessonCode == model.Code).Count(),
                 totalQuestion = (from a in _context.Question.Where(x => !x.IsDeleted && x.LessonCode == model.Code)
                                  join b in _context.Answer.Where(x=>!x.IsDeleted) on a.Code equals b.QuestionCode
-                                 where b!= null
+                                 group a by a.Code into b
                                  select new
                                  {
-                                     a.Code
+                                     b.Key
                                  }).Count(),
                 totalPuzzle = (from a in _context.Question.Where(x => !x.IsDeleted && x.LessonCode == model.Code)
                                join b in _context.Answer.Where(x => !x.IsDeleted) on a.Code equals b.QuestionCode into c
                                from b in c.DefaultIfEmpty()
                                where b == null
+                               group a by a.Code into b
                                select new
                                {
-                                   a.Code
+                                   b.Key
                                }).Count(),
             };
             return Ok(result);
