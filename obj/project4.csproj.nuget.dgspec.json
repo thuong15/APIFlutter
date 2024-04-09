@@ -1,20 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\C#_test\\project4\\project4.csproj": {}
+    "E:\\flutterAPI\\APIflutter\\project4.csproj": {}
   },
   "projects": {
-    "C:\\C#_test\\project4\\project4.csproj": {
+    "E:\\flutterAPI\\APIflutter\\project4.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\C#_test\\project4\\project4.csproj",
+        "projectUniqueName": "E:\\flutterAPI\\APIflutter\\project4.csproj",
         "projectName": "project4",
-        "projectPath": "C:\\C#_test\\project4\\project4.csproj",
-        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "C:\\C#_test\\project4\\obj\\",
+        "projectPath": "E:\\flutterAPI\\APIflutter\\project4.csproj",
+        "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
+        "outputPath": "E:\\flutterAPI\\APIflutter\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,6 +25,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\sdk\\7.0.304\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -100,7 +104,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.304\\RuntimeIdentifierGraph.json"
         }
       }
     }

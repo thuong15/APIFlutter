@@ -11,7 +11,7 @@ using project4.model;
 namespace project4.Migrations
 {
     [DbContext(typeof(project4Context))]
-    [Migration("20240318052534_InitialCreate")]
+    [Migration("20240321041113_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
