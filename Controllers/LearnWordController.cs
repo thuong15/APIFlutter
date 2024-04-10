@@ -40,8 +40,8 @@ namespace project4.Controllers
             foreach (var item in check)
             {
                 int index = data.FindIndex(x => x.Code == item.Code);
-                data[index].IsCorrect = true;
-                List<int> test = randomAnswer(data.Count(), index, totalAnswer).Result;
+				data[index].IsTrue = true;
+				List<int> test = randomAnswer(data.Count(), index, totalAnswer).Result;
 
                 foreach (var i in test)
                 {
