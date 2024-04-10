@@ -14,6 +14,7 @@ namespace project4.Controllers
         {
             _context = context;
         }
+        [HttpGet]
         public async Task<IActionResult> GetDetailLesson()
         {
             var data = _context.Question.Where(x => x.IsDeleted == false && x.LessonCode == "L_GD_1").Select(x => new
