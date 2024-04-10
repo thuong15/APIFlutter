@@ -73,8 +73,9 @@ namespace project4.Controllers
 
 				_context.History.Add(itemm);
 
-				var dataHistory = _context.History.OrderByDescending(x=>x.ID).FirstOrDefault(x => x.IsDeleted == false && x.LessonCode == item.CodeLesson && x.QuestionCode == item.CodeQuestion);
-				if (dataHistory!=null)
+                //var dataHistory = _context.History.OrderByDescending(x=>x.ID).FirstOrDefault(x => x.IsDeleted == false && x.LessonCode == item.CodeLesson && x.QuestionCode == item.CodeQuestion);
+                var dataHistory = _context.History.OrderByDescending(x => x.ID).FirstOrDefault(x => x.UserCode == item.UserCode && x.IsDeleted == false && x.LessonCode == item.CodeLesson && x.QuestionCode == item.CodeQuestion);
+                if (dataHistory!=null)
 				{
 					dataHistory.IsNew = false;
 				}

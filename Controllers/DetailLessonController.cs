@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using project4.model;
+using project4.ModelView;
 
 namespace project4.Controllers
 {
@@ -14,15 +15,30 @@ namespace project4.Controllers
         {
             _context = context;
         }
-        [HttpGet]
-        public async Task<IActionResult> GetDetailLesson()
+        [HttpPost("GetDetailLesson")]
+        public async Task<IActionResult> GetDetailLesson([FromBody] ModelViewDetailLesson modelViewDetailLesson)
         {
-            var data = _context.Question.Where(x => x.IsDeleted == false && x.LessonCode == "L_GD_1").Select(x => new
+            var title = _context.Lesson.FirstOrDefault(x => x.IsDeleted == false && x.Code == modelViewDetailLesson.LessonCode).Name;
+
+            var data = _context.Question.Where(x => x.IsDeleted == false && x.LessonCode == modelViewDetailLesson.LessonCode).Select(x => new
             {
+
                 question = x.Name,
                 avatar = x.Avatar,
+                listAnswer = _context.Answer.Where(h => h.IsDeleted == false && h.QuestionCode == x.Code).Select(x => new
+                {
+                    answer = x.Name,
+                    isTrue = x.IsTrue,
+                }).ToList()
             });
-            return Ok();
+            var total = _context.Question.Where(x => x.IsDeleted == false && x.LessonCode == modelViewDetailLesson.LessonCode).Count();
+            var listData = new
+            {
+                title = title,
+                data = data,
+                total= total
+            };
+            return Ok(listData);
         }
     }
 }
