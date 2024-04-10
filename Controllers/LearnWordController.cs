@@ -31,7 +31,7 @@ namespace project4.Controllers
                             Code = a.Code,
                             NameEN = a.NameEN,
                             NameVN = a.NameVN,
-                            IsCorrect = false,
+                            IsTrue = false,
                             IsChoose = false
                         }).ToList();
 
