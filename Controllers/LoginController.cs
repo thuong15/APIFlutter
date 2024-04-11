@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using project4.model;
 using project4.ModelView;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace project4.Controllers
 {
@@ -18,19 +21,97 @@ namespace project4.Controllers
         [HttpPost("CheckAcc")]
         public async Task<IActionResult> CheckAcc([FromBody] ModelViewLogin modelViewLogin)
         {
-            bool login = false;
-            var checkUser = _context.Account.FirstOrDefault(x=>x.IsDeleted == false 
-                                                && x.UserName == modelViewLogin.UserName 
-                                                && x.Password == modelViewLogin.Password);
-            if (checkUser != null)
+            string inputPassword = modelViewLogin.Password;
+
+            using (MD5 md5 = MD5.Create())
             {
-                login = true;
+                // Chuyển đổi mật khẩu nhập vào thành giá trị băm
+                byte[] inputBytes = Encoding.ASCII.GetBytes(inputPassword);
+                byte[] hashBytes = md5.ComputeHash(inputBytes);
+
+                // Chuyển đổi giá trị băm thành chuỗi hex
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < hashBytes.Length; i++)
+                {
+                    sb.Append(hashBytes[i].ToString("x2"));
+                }
+                string inputHash = sb.ToString();
+
+                bool login = false;
+                var checkUser = _context.Account.FirstOrDefault(x => x.IsDeleted == false
+                                                    && x.UserName == modelViewLogin.UserName
+                                                    && x.Password == inputHash);
+                if (checkUser != null)
+                {
+                    login = true;
+                }
+                else
+                {
+                    login = false;
+                }
+                return Ok(login);
             }
-            else
+        }
+        [HttpPost("Register")]
+        public async Task<IActionResult> Register([FromBody] DataRegister dataRegister)
+        {
+            bool status = false;
+            string title = "";
+            try
             {
-                login = false;
+                var pass = dataRegister.Password;
+                using (MD5 md5 = MD5.Create())
+                {
+                    // Chuyển đổi chuỗi thành mảng byte và tính toán giá trị băm (hash)
+                    byte[] inputBytes = Encoding.ASCII.GetBytes(pass);
+                    byte[] hashBytes = md5.ComputeHash(inputBytes);
+
+                    // Chuyển đổi mảng byte thành chuỗi hex
+                    StringBuilder sb = new StringBuilder();
+                    for (int i = 0; i < hashBytes.Length; i++)
+                    {
+                        sb.Append(hashBytes[i].ToString("x2"));
+                    }
+                    pass = sb.ToString();
+                }
+                var check = _context.Account.Where(x => x.IsDeleted == false).OrderByDescending(x => x.ID).FirstOrDefault();
+
+                int id_max = (int)(check != null ? check.ID + 1 : 1);
+                var checkAcc = _context.Account.Where(x => x.IsDeleted == false && x.UserName == dataRegister.UserName);
+                var checkName = _context.Account.Where(x => x.IsDeleted == false && x.Name == dataRegister.Name);
+                if (checkAcc != null && checkName != null)
+                {
+                    Account account = new Account
+                    {
+                        Code = "acc_" + id_max,
+                        UserName = dataRegister.UserName,
+                        Password = pass,
+                        Name = dataRegister.Name,
+                        Avatar = "cartoon.jpg",
+                        CreatedBy = "admin",
+                        CreatedTime = DateTime.Now,
+                    };
+                    _context.Account.Add(account);
+                    _context.SaveChanges();
+                    status = true;
+                    title = "Đăng ký thành công.";
+                }
+                else
+                {
+                    status = false;
+                    title = "Tài khoản đã tồn tại.";
+                }
             }
-            return Ok(login);
+            catch (Exception ex)
+            {
+                title = "Có lỗi xảy ra khi đăng ký tài khoản!";
+            }
+            var result = new
+            {
+                status = status,
+                title = title
+            };
+            return Ok(result);
         }
     }
 }
