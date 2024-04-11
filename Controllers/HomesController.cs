@@ -38,38 +38,38 @@ namespace project4.Controllers
         public async Task<IActionResult> GetListLesson([FromBody] ItemGetListLesson model)
         {
             var check = from a in _context.Lesson.Where(x => !x.IsDeleted)
-                       select new
-                       {
-                           LessonCode = a.Code,
-                           TopicCode = a.TopicCode,
-                           Count = _context.Word.Count(b => b.LessonCode == a.Code && !b.IsDeleted) + _context.Question.Count(b => b.LessonCode == a.Code && !b.IsDeleted)
-                       };
+                        select new
+                        {
+                            LessonCode = a.Code,
+                            TopicCode = a.TopicCode,
+                            Count = _context.Word.Count(b => b.LessonCode == a.Code && !b.IsDeleted) + _context.Question.Count(b => b.LessonCode == a.Code && !b.IsDeleted)
+                        };
 
             var check1 = from a in _context.Topic.Where(x => !x.IsDeleted && x.Code == model.CodeTopic)
-                       join b in _context.Lesson.Where(x => !x.IsDeleted) on a.Code equals b.TopicCode
-                       join c in _context.History.Where(x => !x.IsDeleted && x.IsNew) on b.Code equals c.LessonCode into d
-                       from c in d.DefaultIfEmpty()
-                       select new
-                       {
-                           code = b.Code,
-                           count = c.IsCorrect ? 1 : 0,
-                           wCode = c.WordCode,
-                           qCode = c.QuestionCode
-                       } into e
-                       group e by e.code into h
-                       select new
-                       {
-                           Code = h.Key,
-                           Count = h.Sum(x=>x.count),
-                       };
+                         join b in _context.Lesson.Where(x => !x.IsDeleted) on a.Code equals b.TopicCode
+                         join c in _context.History.Where(x => !x.IsDeleted && x.IsNew) on b.Code equals c.LessonCode into d
+                         from c in d.DefaultIfEmpty()
+                         select new
+                         {
+                             code = b.Code,
+                             count = c.IsCorrect ? 1 : 0,
+                             wCode = c.WordCode,
+                             qCode = c.QuestionCode
+                         } into e
+                         group e by e.code into h
+                         select new
+                         {
+                             Code = h.Key,
+                             Count = h.Sum(x => x.count),
+                         };
 
             var data = from a in check
-                          join b in check1 on a.LessonCode equals b.Code
-                          select new
-                          {
-                              a.LessonCode,
-                              totalStar = b.Count == 0 ? 0 : a.Count == b.Count ? 3 : ((b.Count / a.Count) * 100) > 60 ? 2 : 1,
-                          };
+                       join b in check1 on a.LessonCode equals b.Code
+                       select new
+                       {
+                           a.LessonCode,
+                           totalStar = b.Count == 0 ? 0 : a.Count == b.Count ? 3 : ((b.Count / a.Count) * 100) > 60 ? 2 : 1,
+                       };
 
             var result = from a in _context.Topic.Where(x => !x.IsDeleted && x.Code == model.CodeTopic)
                          join b in _context.Lesson.Where(x => !x.IsDeleted) on a.Code equals b.TopicCode
@@ -89,12 +89,19 @@ namespace project4.Controllers
         [HttpPost("GetDay")]
         public async Task<IActionResult> GetDay([FromBody] Item model)
         {
-            var result = new
-            {
-                totalDay = '3'
-            };
+        //    var loginRecords = _context.History
+        //.OrderBy(x => x.CreatedTime.Value.Date)
+        //.GroupBy(x => x.UserCode)
+        //.Select(group => new
+        //{
+        //    UserCode = group.Key,
+        //    ConsecutiveDays = group.Select((record, index) => new { Date = record.CreatedTime.Value.Date, Index = index })
+        //                           .GroupBy(x => x.Date.AddDays(-x.Index))
+        //                           .Max(group => group.Count())
+        //})
+        //.ToList();
 
-            return Ok(result);
+            return Ok();
         }
     }
 }
