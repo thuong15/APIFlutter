@@ -41,16 +41,24 @@ namespace project4.Controllers
                             avatar = groupedData.Select(x => x.Avatar).FirstOrDefault(),
                         }).FirstOrDefault();
 
-            var data = (from a in _context.Account.Where(x => x.IsDeleted == false)
+			var data = (from a in _context.Account.Where(x => x.IsDeleted == false)
                         join b in _context.History.Where(x => x.IsDeleted == false && x.IsNew == true && x.IsCorrect == true && x.CreatedTime >= startDate && x.CreatedTime <= endDate)
                         on a.Code equals b.UserCode
-                        group b by b.UserCode into groupedData
+                        select new
+                        {
+                            a.Name,
+                            a.Avatar,
+                            a.Code,
+                            b.IsCorrect
+                        } into c
+                        group c by c.Code into groupedData
                         select new
                         {
                             groupedData.Key,
-                            name = _context.Account.FirstOrDefault(x => x.IsDeleted == false && x.Code == groupedData.Key).Name,
-                            avartar = _context.Account.FirstOrDefault(x => x.IsDeleted == false && x.Code == groupedData.Key).Avatar,
-                            totalscore = groupedData.Count(x => x.IsCorrect),
+                            name = groupedData.First().Name,
+                            avartar = groupedData.First().Avatar,
+                            isUser = groupedData.First().Code == modelViewRetings.UserCode ? true : false,
+							totalscore = groupedData.Count(x => x.IsCorrect),
                         }).OrderByDescending(x => x.totalscore);
             var userPosition = data.ToList().FindIndex(x => x.Key == modelViewRetings.UserCode) + 1;
             var result = new
