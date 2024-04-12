@@ -30,6 +30,7 @@ namespace project4.Controllers
                            a.Code,
                            a.Count,
                            a.NameEN,
+                           a.NameVN,
                        };
             var check = from a in _context.History.Where(x => !x.IsDeleted && x.IsCorrect && x.QuestionCode == "" && x.UserCode == modelItem.CodeUser)
                         group a by a.WordCode into b
@@ -48,7 +49,8 @@ namespace project4.Controllers
                              wordTotalCount = a.Count,
                              wordCount = b.Count,
                              IsRemomerize = a.Count == b.Count,
-                             NameEN = char.ToUpper(a.NameEN.FirstOrDefault()) + a.NameEN.Substring(1)
+                             NameEN = char.ToUpper(a.NameEN.FirstOrDefault()) + a.NameEN.Substring(1),
+                             NameVN = char.ToUpper(a.NameVN.FirstOrDefault()) + a.NameVN.Substring(1)
                          } into c
                          where c.IsRemomerize == modelItem.IsRemomerize
                          select new
@@ -56,7 +58,8 @@ namespace project4.Controllers
                              c.Code,
                              c.NameEN,
                              c.wordTotalCount,
-                             c.wordCount
+                             c.wordCount,
+                             c.NameVN
                          }).ToList();
 
             // Action InfoTotalWord using

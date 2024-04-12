@@ -70,7 +70,7 @@ namespace project4.Controllers
             return Ok(result);
         }
         [HttpPost("RankLastMonth")]
-        public async Task<IActionResult> RankLastMonth([FromBody] ModelViewRetings modelViewRetings)
+        public async Task<IActionResult> RankLastMonth()
         {
             DateTime Date = DateTime.Now;
             DateTime startDate = new DateTime(Date.Year, Date.Month, 1);
@@ -86,9 +86,8 @@ namespace project4.Controllers
                                {
                                    groupedData.Key.UserCode,
                                    totalscore = groupedData.Count(x => x.IsCorrect),
-                               }).OrderByDescending(x => x.totalscore);
-            var userPosition = dataHistory.ToList().FindIndex(x => x.UserCode == modelViewRetings.UserCode) + 1;
-            return Ok(userPosition);
+                               }).OrderByDescending(x => x.totalscore).FirstOrDefault();
+            return Ok(dataHistory);
         }
 
     }
