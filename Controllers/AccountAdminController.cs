@@ -19,7 +19,7 @@ namespace project4.Controllers
 		}
 
 
-		
+
 
 		[HttpGet("phantrangdynamic")]
 		public async Task<IActionResult> sapxepdynamic(int page = 1, int pageSize = 2, string? q = "", string? sortBy = "")// ,bool isSortAscending = true
@@ -52,12 +52,25 @@ namespace project4.Controllers
 		[HttpPost("GetAccountById")]
 		public async Task<IActionResult> GetAccountById([FromBody] Item model)
 		{
-			var result = _context.Account.Where(t=>t.Code==model.Code).ToList();
+			var result = _context.Account.Where(t => t.Code == model.Code).ToList();
 			return Ok(result);
+		}
+		[HttpPost("DeleteAdminByCode")]
+		public async Task<IActionResult> DeleteTopicById([FromBody] Item model)
+		{
+			var acc = await _context.Account.FirstOrDefaultAsync(t => t.Code == model.Code);
+			if (acc == null)
+			{
+				return NotFound();
+			}
+			_context.Account.Remove(acc);
+			await _context.SaveChangesAsync();
+
+			return Ok();
 		}
 
 	}
 
-	
+
 
 }
