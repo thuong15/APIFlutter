@@ -27,23 +27,32 @@ namespace project4.Controllers
             var endDatePreviousMonth = endDate.AddMonths(-1);
 
             var dataHistory = (from a in _context.Account.Where(x => x.IsDeleted == false)
-                               join b in _context.History.Where(x => x.IsDeleted == false && x.IsNew == true && x.IsCorrect == true && x.CreatedTime >= startDatePreviousMonth && x.CreatedTime <= endDatePreviousMonth)
+                               join b in _context.History.Where(x => x.IsDeleted == false && x.IsCorrect == true && x.CreatedTime >= startDatePreviousMonth && x.CreatedTime <= endDatePreviousMonth)
                                on a.Code equals b.UserCode
                                select new
                                {
                                    a.Code,
                                    a.Avatar,
                                    a.Name,
-                                   b.IsCorrect,
-                               }into c
-                               group c by new { c.Code } into groupedData
+                                   b.WordCode,
+                                   b.QuestionCode
+                               }
+                               into c
+                               group c by new { c.WordCode, c.QuestionCode, c.Code } into groupedData
                                select new
                                {
                                    groupedData.Key.Code,
                                    groupedData.First().Name,
                                    groupedData.First().Avatar,
-                                   totalscore = groupedData.Count(x => x.IsCorrect),
-                               }).OrderByDescending(x => x.totalscore).FirstOrDefault();
+                               } into d
+                               group d by d.Code into g
+                               select new
+                               {
+                                   g.Key,
+                                   g.First().Name,
+                                   g.First().Avatar,
+                                   totalscore = g.Count(),
+                               }).FirstOrDefault();
 
             var data = (from a in _context.Account.Where(x => x.IsDeleted == false)
                         join b in _context.History.Where(x => x.IsDeleted == false && x.IsNew == true && x.IsCorrect == true && x.CreatedTime >= startDate && x.CreatedTime <= endDate)
@@ -62,7 +71,7 @@ namespace project4.Controllers
                             name = groupedData.First().Name,
                             avartar = groupedData.First().Avatar,
                             isUser = groupedData.First().Code == modelViewRetings.UserCode ? true : false,
-							totalscore = groupedData.Count(x => x.IsCorrect),
+                            totalscore = groupedData.Count(x => x.IsCorrect),
                         }).OrderByDescending(x => x.totalscore);
             var result = new
             {
