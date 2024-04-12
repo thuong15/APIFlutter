@@ -22,6 +22,8 @@ namespace project4.Controllers
         public async Task<IActionResult> CheckAcc([FromBody] ModelViewLogin modelViewLogin)
         {
             string inputPassword = modelViewLogin.Password;
+            bool login = false;
+            string code = "";
 
             using (MD5 md5 = MD5.Create())
             {
@@ -37,20 +39,25 @@ namespace project4.Controllers
                 }
                 string inputHash = sb.ToString();
 
-                bool login = false;
                 var checkUser = _context.Account.FirstOrDefault(x => x.IsDeleted == false
                                                     && x.UserName == modelViewLogin.UserName
                                                     && x.Password == inputHash);
                 if (checkUser != null)
                 {
                     login = true;
-                }
+                    code = checkUser.Code;
+				}
                 else
                 {
                     login = false;
                 }
-                return Ok(login);
             }
+            var result = new
+            {
+                status = login,
+                code = code
+			};
+            return Ok(result);
         }
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] DataRegister dataRegister)
