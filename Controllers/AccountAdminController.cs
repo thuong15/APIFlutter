@@ -56,6 +56,13 @@ namespace project4.Controllers
 			return Ok(result);
 		}
 
+		[HttpPost("GetAccountfffById")]
+		public async Task<IActionResult> GetAccountByIffd([FromBody] Item model)
+		{
+			var result = _context.Account.Where(t=>t.Code==model.Code).ToList();
+			return Ok(result);
+		}
+
 	}
 
 	
