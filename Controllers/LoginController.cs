@@ -74,7 +74,7 @@ namespace project4.Controllers
                     }
                     pass = sb.ToString();
                 }
-                var check = _context.Account.Where(x => x.IsDeleted == false).OrderByDescending(x => x.ID).FirstOrDefault();
+                var check = _context.Account.OrderByDescending(x => x.ID).FirstOrDefault();
 
                 int id_max = (int)(check != null ? check.ID + 1 : 1);
                 var checkAcc = _context.Account.Where(x => x.IsDeleted == false && x.UserName == dataRegister.UserName);
