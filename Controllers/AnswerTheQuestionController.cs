@@ -62,7 +62,7 @@ namespace project4.Controllers
 					LessonCode = item.CodeLesson,
 					IsCorrect = item.IsCorrect,
 					UserCode = item.UserCode,
-					WordCode = "",
+					WordCode = item.CodeWord,
 					QuestionCode = item.CodeQuestion,
 					IsNew = true,
 					CreatedBy = "Admin",
@@ -73,8 +73,7 @@ namespace project4.Controllers
 
 				_context.History.Add(itemm);
 
-                //var dataHistory = _context.History.OrderByDescending(x=>x.ID).FirstOrDefault(x => x.IsDeleted == false && x.LessonCode == item.CodeLesson && x.QuestionCode == item.CodeQuestion);
-                var dataHistory = _context.History.OrderByDescending(x => x.ID).FirstOrDefault(x => x.UserCode == item.UserCode && x.IsDeleted == false && x.LessonCode == item.CodeLesson && x.QuestionCode == item.CodeQuestion);
+                var dataHistory = _context.History.OrderByDescending(x => x.ID).FirstOrDefault(x => x.UserCode == item.UserCode && x.IsDeleted == false && x.LessonCode == item.CodeLesson && x.QuestionCode == item.CodeQuestion && x.QuestionCode == item.CodeWord);
                 if (dataHistory!=null)
 				{
 					dataHistory.IsNew = false;

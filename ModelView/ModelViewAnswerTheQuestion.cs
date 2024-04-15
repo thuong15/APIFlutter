@@ -5,6 +5,7 @@
 		public string UserCode { get; set; }
 		public string CodeLesson { get; set; }
 		public string CodeQuestion { get; set; }
+		public string CodeWord { get; set; }
 		public bool IsCorrect { get;set; }
 	}
 	public class ModelViewDataAnswer

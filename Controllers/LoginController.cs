@@ -96,6 +96,7 @@ namespace project4.Controllers
                         UserName = dataRegister.UserName,
                         Password = pass,
                         Name = dataRegister.Name,
+                        IsAdmin = dataRegister.IsAdmin,
                         Avatar = "cartoon.jpg",
                         CreatedBy = "admin",
                         CreatedTime = DateTime.Now,

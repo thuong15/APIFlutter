@@ -51,6 +51,7 @@ namespace project4.Controllers
                           select new ResultGetDataQuestion
                           {
                               NameEN = a.NameEN,
+                              Code = a.Code,
 							  NameVN = a.NameVN,
                               listAnswer = listAnswer,
                               Avatar = a.Avatar,

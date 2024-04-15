@@ -16,6 +16,7 @@
     }
     public class ResultGetDataQuestion
     {
+        public string Code { get; set; }
         public string Avatar { get; set; }
         public string NameEN { get; set; }
         public string NameVN { get; set; }
