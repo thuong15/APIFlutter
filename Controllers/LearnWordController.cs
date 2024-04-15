@@ -31,7 +31,6 @@ namespace project4.Controllers
                             Code = a.Code,
                             NameEN = a.NameEN,
                             NameVN = a.NameVN,
-                            IsTrue = false,
                             IsChoose = false
                         }).ToList();
 
@@ -40,20 +39,19 @@ namespace project4.Controllers
             foreach (var item in check)
             {
                 int index = data.FindIndex(x => x.Code == item.Code);
-				data[index].IsTrue = true;
-				List<int> test = randomAnswer(data.Count(), index, totalAnswer).Result;
+				List<int> listIndex = randomAnswer(data.Count(), index, totalAnswer).Result;
 
-                foreach (var i in test)
+                foreach (var i in listIndex)
                 {
                     listAnswer.Add(data[i]);
                 };
-                //data[index].IsCorrect = false;
             }
 
             var result = (from a in _context.Word.Where(x => !x.IsDeleted && x.LessonCode == model.Code)
                           select new ResultGetDataQuestion
                           {
                               NameEN = a.NameEN,
+							  NameVN = a.NameVN,
                               listAnswer = listAnswer,
                               Avatar = a.Avatar,
                           }).ToList();

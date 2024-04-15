@@ -20,7 +20,7 @@ namespace project4.Controllers
 		public async Task<IActionResult> GetDataQuestion([FromBody] ModelViewDataAnswer item)
 		{
 			var data = from a in _context.Lesson.Where(x => x.IsDeleted == false && x.Code == item.CodeLesson)
-					   join b in _context.Question.Where(x => x.IsDeleted == false) on a.Code equals b.LessonCode
+					   join b in _context.Question.Where(x => x.IsDeleted == false && x.Description == "") on a.Code equals b.LessonCode
 					   select new
 					   {
 						   code = b.Code,

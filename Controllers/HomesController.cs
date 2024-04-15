@@ -38,38 +38,47 @@ namespace project4.Controllers
 		[HttpPost("GetListLesson")]
 		public async Task<IActionResult> GetListLesson([FromBody] ItemGetListLesson model)
 		{
-			var check = from a in _context.Lesson.Where(x => !x.IsDeleted)
-						select new
-						{
-							LessonCode = a.Code,
-							TopicCode = a.TopicCode,
-							Count = _context.Word.Count(b => b.LessonCode == a.Code && !b.IsDeleted) + _context.Question.Count(b => b.LessonCode == a.Code && !b.IsDeleted)
-						};
+			var checkDefault = from a in _context.Lesson.Where(x => !x.IsDeleted && x.TopicCode == model.CodeTopic)
+							   select new
+							   {
+								   LessonCode = a.Code,
+								   TopicCode = a.TopicCode,
+								   Count = _context.Word.Count(b => b.LessonCode == a.Code && !b.IsDeleted) + _context.Question.Count(b => b.LessonCode == a.Code && !b.IsDeleted)
+							   };
 
-			var check1 = from a in _context.Topic.Where(x => !x.IsDeleted && x.Code == model.CodeTopic)
-						 join b in _context.Lesson.Where(x => !x.IsDeleted) on a.Code equals b.TopicCode
-						 join c in _context.History.Where(x => !x.IsDeleted && x.IsNew) on b.Code equals c.LessonCode into d
-						 from c in d.DefaultIfEmpty()
-						 select new
-						 {
-							 code = b.Code,
-							 count = c.IsCorrect ? 1 : 0,
-							 wCode = c.WordCode,
-							 qCode = c.QuestionCode
-						 } into e
-						 group e by e.code into h
-						 select new
-						 {
-							 Code = h.Key,
-							 Count = h.Sum(x => x.count),
-						 };
+			var checkHistory = from a in _context.Topic.Where(x => !x.IsDeleted && x.Code == model.CodeTopic)
+							   join b in _context.Lesson.Where(x => !x.IsDeleted) on a.Code equals b.TopicCode
+							   join c in _context.History.Where(x => !x.IsDeleted && x.IsCorrect && x.UserCode == model.CodeUser) on b.Code equals c.LessonCode into k
+							   from c in k.DefaultIfEmpty()
+							   select new
+							   {
+								   code = b.Code,
+								   check = c != null ? true : false,
+								   wCode = c.WordCode,
+								   qCode = c.QuestionCode
+							   }
+							   into e
+							   group e by new { e.code, e.wCode, e.qCode } into h
+							   select new
+							   {
+								   code = h.Key.code,
+								   check = h.First().check
+							   }
+							   into d
+							   group d by d.code into groupdata
+							   select new
+							   {
+								   code = groupdata.Key,
+								   Count = !groupdata.First().check ? 0 : groupdata.Count()
+							   }
+							   ;
 
-			var data = from a in check
-					   join b in check1 on a.LessonCode equals b.Code
+			var data = from a in checkDefault
+					   join b in checkHistory on a.LessonCode equals b.code
 					   select new
 					   {
 						   a.LessonCode,
-						   totalStar = b.Count == 0 ? 0 : a.Count == b.Count ? 3 : ((b.Count / a.Count) * 100) > 60 ? 2 : 1,
+						   totalStar = b.Count == 0 ? 0 : a.Count <= b.Count ? 3 : ((b.Count / a.Count) * 100) > 60 ? 2 : 1,
 					   };
 
 			var result = from a in _context.Topic.Where(x => !x.IsDeleted && x.Code == model.CodeTopic)
@@ -144,5 +153,67 @@ namespace project4.Controllers
 
 			return Ok(result);
 		}
+
+		[HttpPost("GetCups")]
+		public async Task<IActionResult> GetCups([FromBody] Item model)
+		{
+			string code = "viet_1";
+			var data = (from a in _context.History.Where(x => !x.IsDeleted
+						&& x.CreatedTime.Value.Month < DateTime.Now.Month
+						)
+						select new
+						{
+							CodeHistory = a.Code,
+							Date = a.CreatedTime.Value.Month
+						}).ToList();
+			var data1 = (from a in _context.Account.Where(x => x.IsDeleted == false)
+						 join b in _context.History.Where(x => x.IsDeleted == false && x.IsCorrect && x.CreatedTime.Value.Month < DateTime.Now.Month)
+						 on a.Code equals b.UserCode
+						 select new
+						 {
+							 a.Code,
+							 month = b.CreatedTime.Value.Month
+						 } into c
+						 group c by new { c.Code, c.month } into groupedData
+						 select new
+						 {
+							 groupedData.Key.Code,
+							 totalscore = groupedData.Count(),
+							 month = groupedData.Key.month
+						 });
+
+			var check = (from a in data1
+						 group a by a.month into b
+						 select new
+						 {
+							 b.Key
+						 }).ToList();
+
+			List<ItemResult> listResult = new List<ItemResult>();
+
+			for (int i = 0; i < check.Count; i++)
+			{
+				var temp = (from a in data1.Where(x => x.month == check[i].Key)
+							select a).OrderByDescending(x => x.totalscore).ToList();
+				int index = temp.FindIndex(x => x.Code == code);
+				int checkExits = listResult.FindIndex(x => x.position == index + 1);
+				if (checkExits == -1)
+				{
+					ItemResult item = new ItemResult()
+					{
+						month = check[i].Key.ToString(),
+						position = index + 1
+					};
+					listResult.Add(item);
+				}
+			}
+
+			return Ok(listResult);
+		}
+	}
+	class ItemResult
+	{
+		public int position { get; set; }
+		public string month { get; set; }
 	}
 }
