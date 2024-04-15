@@ -52,7 +52,9 @@ namespace project4.Controllers
                                    g.First().Name,
                                    g.First().Avatar,
                                    totalscore = g.Count(),
-                               }).FirstOrDefault();
+                               }).OrderByDescending(x => x.totalscore)
+                               .FirstOrDefault()
+                               ;
 
             var data1 = from b in _context.Lesson.Where(x => !x.IsDeleted)
                                join c in _context.History.Where(x => !x.IsDeleted && x.IsCorrect) on b.Code equals c.LessonCode into k

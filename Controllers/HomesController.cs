@@ -197,7 +197,7 @@ namespace project4.Controllers
 							select a).OrderByDescending(x => x.totalscore).ToList();
 				int index = temp.FindIndex(x => x.Code == code);
 				int checkExits = listResult.FindIndex(x => x.position == index + 1);
-				if (checkExits == -1)
+				if (checkExits == -1 && index < 3)
 				{
 					ItemResult item = new ItemResult()
 					{
