@@ -84,8 +84,6 @@ namespace project4.Controllers
 				{
 					return NotFound();
 				}
-
-
 				check.Name = modeViewTopic.Name;
 				check.Avatar = modeViewTopic.Avatar;
 				check.ComboColor = modeViewTopic.ComboColor;
@@ -108,14 +106,20 @@ namespace project4.Controllers
 		public async Task<IActionResult> DeleteTopicById([FromBody] Item model)
 		{
 			var topic = await _context.Topic.FirstOrDefaultAsync(t => t.Code == model.Code);
-			if (topic == null)
+			if (topic != null)
 			{
-				return NotFound();
+				topic.IsDeleted = true;
+				topic.DeletedTime = DateTime.Now;
+				topic.DeletedBy = "admin";
+				_context.SaveChanges();
 			}
-			_context.Topic.Remove(topic);
-			await _context.SaveChangesAsync();
-
 			return Ok();
 		}
 	}
 }
+//if (topic == null)
+//{
+//    return NotFound();
+//}
+//_context.Topic.Remove(topic);
+//await _context.SaveChangesAsync();

@@ -16,6 +16,7 @@ namespace project4.model
 		public string Password { get; set; }
 		[StringLength(maximumLength: 100)]
 		public string? Name { get; set; }
+		public bool IsAdmin { get;set; }	
 		[StringLength(maximumLength: 500)]
 		public string? Avatar { get; set; }
 		[StringLength(maximumLength: 100)]

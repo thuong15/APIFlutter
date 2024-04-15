@@ -29,23 +29,17 @@ namespace project4.Controllers
 			var PageSize = pageSize;
 
 
-			var query = _context.Account.AsQueryable();
+			var query = _context.Account.Where(x=>x.IsDeleted == false && x.IsAdmin == false).AsQueryable();
 
 			if (!string.IsNullOrEmpty(q))//tìm kiếm
 			{
 				query = query.Where(p => p.Name.ToLower().Contains(q));
 			}
-			//if (!string.IsNullOrEmpty(sortBy))//sắp xếp
-			//{
-			//	query = query.OrderBy($"{sortBy} {(isSortAscending ? "ascending" : "descending")}");
-			//}
 
 			var result = await query
 				.Skip(((Page - 1) * PageSize)) // Phân trang
 				.Take(pageSize)
 				.ToListAsync();
-
-
 			return Ok(result);
 		}
 

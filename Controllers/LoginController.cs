@@ -23,6 +23,7 @@ namespace project4.Controllers
         {
             string inputPassword = modelViewLogin.Password;
             bool login = false;
+            bool isAdmin = false;
             string code = "";
 
             using (MD5 md5 = MD5.Create())
@@ -44,6 +45,7 @@ namespace project4.Controllers
                                                     && x.Password == inputHash);
                 if (checkUser != null)
                 {
+                    isAdmin = checkUser.IsAdmin;
                     login = true;
                     code = checkUser.Code;
 				}

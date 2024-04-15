@@ -28,7 +28,7 @@ namespace project4.Controllers
           {
               return NotFound();
           }
-            return await _context.Account.ToListAsync();
+            return await _context.Account.Where(x=>x.IsDeleted == false && x.IsAdmin == false).ToListAsync();
         }
 
         // GET: api/Accounts/5
