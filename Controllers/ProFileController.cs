@@ -34,13 +34,20 @@ namespace project4.Controllers
                 createdtime = x.CreatedTime.Value.ToString("dd/MM/yyyy"),
             }).FirstOrDefault();
             var totalscoreQuery = (from a in _context.Account.Where(x => x.IsDeleted == false && x.Code == model.codeUser)
-                                   join b in _context.History.Where(x => x.IsDeleted == false && x.IsNew == true && x.IsCorrect == true && x.CreatedTime >= startDate && x.CreatedTime <= endDate)
+                                   join b in _context.History.Where(x => x.IsDeleted == false && x.IsCorrect == true && x.CreatedTime >= startDate && x.CreatedTime <= endDate)
                                    on a.Code equals b.UserCode
-                                   group b by b.UserCode into groupedData
+                                   group b by new {b.WordCode , b.QuestionCode, b.UserCode } into groupedData
                                    select new
                                    {
-                                       totalscore = groupedData.Count(x => x.IsCorrect),
-                                   }).FirstOrDefault();
+                                       groupedData.Key.UserCode,
+                                       totalscore = groupedData.Count(x => x.IsCorrect) >= 1 ? 1 : 0,
+                                   }into c group c by c.UserCode into groupedData
+                                    select new
+                                    {
+                                        groupedData.Key,
+                                        totalscore = groupedData.Count(),
+                                    }
+                                   ).FirstOrDefault();
             int totalscore = totalscoreQuery != null ? totalscoreQuery.totalscore : 0;
             var data = (from a in _context.Account.Where(x => x.IsDeleted == false)
                         join b in _context.History.Where(x => x.IsDeleted == false && x.IsNew == true && x.IsCorrect == true && x.CreatedTime >= startDate && x.CreatedTime <= endDate)
