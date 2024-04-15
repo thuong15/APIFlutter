@@ -32,14 +32,21 @@ namespace project4.Controllers
                            a.NameEN,
                            a.NameVN,
                        };
-            var check = from a in _context.History.Where(x => !x.IsDeleted && x.IsCorrect && x.QuestionCode == "" && x.UserCode == modelItem.CodeUser)
-                        group a by a.WordCode into b
+            var check = from a in _context.History.Where(x => !x.IsDeleted && x.QuestionCode == "" && x.UserCode == modelItem.CodeUser)
                         select new
                         {
-                            b.First().Code,
-                            WCode = b.Key,
-                            Count = b.Count()
-                        };
+                            a.Code,
+                            WCode = a.WordCode,
+                            correct = a.IsCorrect ? 1 : 0
+                        } into b
+                        group b by b.WCode into c
+                        select new
+                        {
+                            c.First().Code,
+                            WCode = c.Key,
+                            Count = c.Sum(x=>x.correct)
+                        }
+                        ;
 
             var result = (from a in data
                          join b in check on a.Code equals b.WCode

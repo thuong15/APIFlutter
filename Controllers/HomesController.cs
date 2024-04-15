@@ -210,6 +210,32 @@ namespace project4.Controllers
 
 			return Ok(listResult);
 		}
+		[HttpPost("DeleteItem")]
+		public async Task<IActionResult> DeleteItem([FromBody] ItemDelete model)
+		{
+			bool status = false;
+			string title = "";
+			if (model.Type == "account")
+			{
+				var data = _context.Account.FirstOrDefault(x => x.Code == model.Code);
+				if (data != null)
+				{
+					data.IsDeleted = true;
+					_context.SaveChanges();
+					status = true;
+					title = "Xóa tài khoản thành công!";
+				}
+			}
+
+			var result = new
+			{
+				status = status,
+				title = title
+			};
+
+			return Ok(result);
+		}
+
 	}
 	class ItemResult
 	{

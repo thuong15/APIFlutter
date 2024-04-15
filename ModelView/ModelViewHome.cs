@@ -7,8 +7,13 @@
     public class Item
     {
         public string Code { get; set; }
-    }
-    public class ItemGetListLesson
+	}
+	public class ItemDelete
+	{
+		public string Code { get; set; }
+		public string Type { get; set; }
+	}
+	public class ItemGetListLesson
     {
         public string CodeUser { get; set; }
         public string CodeTopic { get; set; }
