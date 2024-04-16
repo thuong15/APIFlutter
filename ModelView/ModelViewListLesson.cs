@@ -11,4 +11,8 @@
         public string avatar { get; set; }
         public string description { get; set; }
     }
+    public class ModelGet
+    {
+        public string codeLesson { get;set; }
+    }
 }

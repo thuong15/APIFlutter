@@ -81,18 +81,30 @@ namespace project4.Controllers
                     status = false;
                     title = "Thêm bài học thành công.";
                 }
-        }
+            }
             catch (Exception ex)
             {
                 status = true;
                 title = "Lỗi không thêm được bài học.";
             }
-    var result = new
+            var result = new
             {
                 status = status,
                 title = title,
             };
             return Ok(result);
+        }
+        [HttpPost("ListWord")]
+        public async Task<IActionResult> ListWord([FromBody] ModelGet model)
+        {
+            var data = _context.Word.Where(x => x.IsDeleted == false && x.LessonCode == model.codeLesson).Select(x => new
+            {
+                code = x.Code,
+                nameEn = x.NameEN,
+                nameVn = x.NameVN,
+                avatar = x.Avatar,
+            });
+            return Ok(data);
         }
         [HttpGet("GetWord")]
         public async Task<IActionResult> GetWord()
