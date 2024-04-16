@@ -2,6 +2,13 @@
 {
     public class ModelViewListLesson
     {
-        public String codeUser { get;set; }
+        public string codeUser { get; set; }
+    }
+    public class addLesson
+    {
+        public string codeTopic { get; set; }
+        public string name { get; set; }
+        public string avatar { get; set; }
+        public string description { get; set; }
     }
 }

@@ -157,7 +157,7 @@ namespace project4.Controllers
 		[HttpPost("GetCups")]
 		public async Task<IActionResult> GetCups([FromBody] Item model)
 		{
-			string code = "viet_1";
+			string code = model.Code;
 			var data = (from a in _context.History.Where(x => !x.IsDeleted
 						&& x.CreatedTime.Value.Month < DateTime.Now.Month
 						)
@@ -234,6 +234,16 @@ namespace project4.Controllers
                     _context.SaveChanges();
                     status = true;
                     title = "Xóa Topic thành công!";
+                }
+            }else if (model.Type == "lesson")
+			{
+                var data = _context.Lesson.FirstOrDefault(x => x.Code == model.Code);
+                if (data != null)
+                {
+                    data.IsDeleted = true;
+                    _context.SaveChanges();
+                    status = true;
+                    title = "Xóa lesson thành công!";
                 }
             }
 
