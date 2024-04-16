@@ -10,5 +10,10 @@
 		public string? UpdateBy { get; set; }
 		public DateTime? CreatedTime { get; set; }
 		public DateTime? UpdatedTime { get; set; }
+	}public class ModeViewaddTopic
+	{
+		public string Name { get; set; }
+		public string Avatar { get; set; }
+		public string ComboColor { get; set; }
 	}
 }

@@ -225,7 +225,17 @@ namespace project4.Controllers
 					status = true;
 					title = "Xóa tài khoản thành công!";
 				}
-			}
+			}else if (model.Type == "topic")
+			{
+                var data = _context.Topic.FirstOrDefault(x => x.Code == model.Code);
+                if (data != null)
+                {
+                    data.IsDeleted = true;
+                    _context.SaveChanges();
+                    status = true;
+                    title = "Xóa Topic thành công!";
+                }
+            }
 
 			var result = new
 			{
