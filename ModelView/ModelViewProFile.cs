@@ -9,5 +9,10 @@
         public string codeUser { get; set;}
         public string name { get;set; }
         public string password { get;set; }
-    }
+	}
+	public class EditAvatar
+	{
+		public string codeUser { get; set; }
+		public string avatar { get; set; }
+	}
 }

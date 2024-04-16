@@ -18,6 +18,7 @@ namespace project4.model
 		public DbSet<project4.model.Question>? Question { get; set; }
 		public DbSet<project4.model.Topic>? Topic { get; set; }
 		public DbSet<project4.model.Word>? Word { get; set; }
+		public DbSet<project4.model.Avatar>? Avatar { get; set; }
 		//public DbSet<Accountsss> Accountsss { get; set; }
 	}
 }
