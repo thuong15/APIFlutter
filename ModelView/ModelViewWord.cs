@@ -8,4 +8,8 @@
         public string avatar { get; set; }
         public int count { get; set; }
     }
+    public class deleteodel
+    {
+        public string code { get; set; }
+    }
 }

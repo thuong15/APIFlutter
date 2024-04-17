@@ -70,5 +70,41 @@ namespace project4.Controllers
             };
             return Ok(result);
         }
+
+        //[HttpPost("deleteWord")]
+        //public async Task<IActionResult> deleteWord([FromBody] deleteodel word)
+        //{
+        //    bool status = false;
+        //    string title = "";
+        //    try
+        //    {
+        //        var codeWord = _context.Word.FirstOrDefault(x => x.IsDeleted == false && x.Code == word.code);
+        //        if (codeWord == null)
+        //        {
+        //            status = true;
+        //            title = "Không tìm thấy dữ liệu";
+        //        }
+        //        else
+        //        {
+        //            codeWord.IsDeleted = true;
+        //            codeWord.DeletedBy = "admin";
+        //            codeWord.DeletedTime = DateTime.Now;
+        //            _context.SaveChanges();
+        //            status = false;
+        //            title = "Xoá từ mới thành công.";
+        //        }
+        //    }
+        //    catch
+        //    {
+        //        status = true;
+        //        title = "Đã có lỗi xảy ra vui lòng thử lại lần sau.";
+        //    }
+        //    var result = new
+        //    {
+        //        status = status,
+        //        title = title,
+        //    };
+        //    return Ok(result);
+        //}
     }
 }

@@ -17,4 +17,15 @@
         public string Avatar { get; set; }
         public string ListAnswer { get; set; }
     }
+    public class AddQuestion
+    {
+        public string LessonCode { get; set; }
+        public string Question { get; set; }
+        public string Avatar { get; set; }
+        public List<string> ListAnswer { get; set; }
+    }
+    public class ListAnswer
+    {
+        public string name { get; set; }
+    }
 }

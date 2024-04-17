@@ -221,7 +221,9 @@ namespace project4.Controllers
 				if (data != null)
 				{
 					data.IsDeleted = true;
-					_context.SaveChanges();
+                    data.DeletedTime = DateTime.Now;
+                    data.DeletedBy = "admin";
+                    _context.SaveChanges();
 					status = true;
 					title = "Xóa tài khoản thành công!";
 				}
@@ -231,6 +233,8 @@ namespace project4.Controllers
                 if (data != null)
                 {
                     data.IsDeleted = true;
+                    data.DeletedTime = DateTime.Now;
+                    data.DeletedBy = "admin";
                     _context.SaveChanges();
                     status = true;
                     title = "Xóa Topic thành công!";
@@ -241,10 +245,41 @@ namespace project4.Controllers
                 if (data != null)
                 {
                     data.IsDeleted = true;
+                    data.DeletedTime = DateTime.Now;
+                    data.DeletedBy = "admin";
                     _context.SaveChanges();
                     status = true;
                     title = "Xóa lesson thành công!";
                 }
+            }else if (model.Type == "word")
+			{
+                var data = _context.Word.FirstOrDefault(x => x.Code == model.Code);
+                if (data != null)
+                {
+                    data.IsDeleted = true;
+					data.DeletedTime = DateTime.Now;
+					data.DeletedBy = "admin";
+                    _context.SaveChanges();
+                    status = true;
+                    title = "Xóa word thành công!";
+                }
+			}else if (model.Type == "question")
+			{
+                var data = _context.Question.FirstOrDefault(x => x.Code == model.Code);
+                if (data != null)
+                {
+                    data.IsDeleted = true;
+                    data.DeletedTime = DateTime.Now;
+                    data.DeletedBy = "admin";
+                    _context.SaveChanges();
+                    status = true;
+                    title = "Xóa word thành công!";
+                }
+            }
+			else
+			{
+                status = false;
+                title = "Không tìm thấy dữ liệu vui lòng thử lại!";
             }
 
 			var result = new
