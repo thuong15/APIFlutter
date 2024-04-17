@@ -56,6 +56,7 @@ namespace project4.Controllers
             }
             var result = new
             {
+                isadmin = isAdmin,
                 status = login,
                 code = code
 			};
