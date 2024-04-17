@@ -100,7 +100,6 @@ namespace project4.Controllers
                         count++;
                         _context.Answer.Add(answer);
                     }
-
                 }
                 _context.SaveChanges();
                 status = false;
