@@ -23,7 +23,7 @@ namespace project4.Controllers
 
             try
             {
-                var checkName = _context.Word.FirstOrDefault(x => x.IsDeleted == false && x.LessonCode == model.codeLesson && x.NameEN == model.nameEn && x.NameVN == model.nameVn);
+                var checkName = _context.Word.FirstOrDefault(x => x.IsDeleted == false && x.NameEN == model.nameEn && x.NameVN == model.nameVn);
                 if (checkName == null)
                 {
                     string dataFlutter = model.codeLesson;
@@ -35,7 +35,7 @@ namespace project4.Controllers
                     int id_max = (int)(check != null ? check.ID + 1 : 1);
                     Word word = new Word
                     {
-                        Code = "w_" + CodeLesson + "_" + id_max,
+                        Code = "W_" + CodeLesson + "_" + id_max,
                         LessonCode = model.codeLesson,
                         NameEN = model.nameEn,
                         NameVN = model.nameVn,
@@ -66,7 +66,7 @@ namespace project4.Controllers
             var result = new
             {
                 status = status,
-                tilte = tilte
+                title = tilte
             };
             return Ok(result);
         }
