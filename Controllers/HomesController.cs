@@ -113,7 +113,7 @@ namespace project4.Controllers
 							u = g.First().CodeHistory
 						})
 						.ToList();
-			int consecutiveDays = 1;
+			int consecutiveDays = 0;
 			if (data.Count() > 0)
 			{
 				DateTime date = DateTime.ParseExact(data.LastOrDefault().Date, "dd/MM/yyyy", CultureInfo.InvariantCulture);
@@ -125,18 +125,22 @@ namespace project4.Controllers
 				{
 					for (int i = 0; i < data.Count - 1; i++)
 					{
-						currentDate = DateTime.ParseExact(data[i].Date, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+						DateTime startDate = DateTime.ParseExact(data[i].Date, "dd/MM/yyyy", CultureInfo.InvariantCulture);
 						DateTime nextDate = DateTime.ParseExact(data[i + 1].Date, "dd/MM/yyyy", CultureInfo.InvariantCulture);
 
-						check = (nextDate.Day - currentDate.Day);
 
-						if ((nextDate.Day - currentDate.Day) == 1 && (nextDate.Month == currentDate.Month))
+						if ((nextDate.Day - startDate.Day) == 1 && (nextDate.Month == startDate.Month))
 						{
 							consecutiveDays++;
 						}
 						else
 						{
-							consecutiveDays = 1;
+							consecutiveDays = 0;
+						}
+
+						if (nextDate.Day == currentDate.Day && nextDate.Month == currentDate.Month && nextDate.Year == currentDate.Year)
+						{
+							consecutiveDays++;
 						}
 					}
 				}
@@ -153,6 +157,7 @@ namespace project4.Controllers
 
 			return Ok(result);
 		}
+
 
 		[HttpPost("GetCups")]
 		public async Task<IActionResult> GetCups([FromBody] Item model)
