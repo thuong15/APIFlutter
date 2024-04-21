@@ -57,16 +57,16 @@ namespace project4.Controllers
             var question = _context.Question.FirstOrDefault(x => x.IsDeleted == false && x.Name == model.Question);
             if (question == null)
             {
-                string dataFlutter = model.LessonCode;
-                string[] parts = dataFlutter.Split('_');
-                string CodeLesson = parts[1];
+                //string dataFlutter = model.LessonCode;
+                //string[] parts = dataFlutter.Split('_');
+                //string CodeLesson = parts[1];
 
                 var check = _context.Question.OrderByDescending(x => x.ID).FirstOrDefault();
 
                 int id_max = (int)(check != null ? check.ID + 1 : 1);
                 Question addquestion = new Question
                 {
-                    Code = "Q_" + CodeLesson + "_" + id_max,
+                    Code = "Q_" + id_max,
                     LessonCode = model.LessonCode,
                     Avatar = model.Avatar,
                     Name = model.Question,
@@ -88,8 +88,8 @@ namespace project4.Controllers
                     {
                         Answer answer = new Answer
                         {
-                            Code = "A_" + CodeLesson + "_" + id_maAsx,
-                            QuestionCode = "Q_" + CodeLesson + "_" + id_max,
+                            Code = "A_" + id_maAsx,
+                            QuestionCode = addquestion.Code,
                             Name = name,
                             IsTrue = count == 0 ? true : false,
                             CreatedBy = "admin",

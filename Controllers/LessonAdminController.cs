@@ -64,7 +64,7 @@ namespace project4.Controllers
                     int id_max = (int)(check != null ? check.ID + 1 : 1);
                     Lesson lesson = new Lesson
                     {
-                        Code = "L_" + add.codeTopic + "_" + id_max,
+                        Code = "L_" + id_max,
                         TopicCode = add.codeTopic,
                         Avatar = add.avatar,
                         Name = add.name,

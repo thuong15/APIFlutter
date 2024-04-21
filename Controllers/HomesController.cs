@@ -123,6 +123,10 @@ namespace project4.Controllers
 
 				if (check <= 1)
 				{
+					if (data.Count() == 1)
+					{
+						consecutiveDays++;
+					}
 					for (int i = 0; i < data.Count - 1; i++)
 					{
 						DateTime startDate = DateTime.ParseExact(data[i].Date, "dd/MM/yyyy", CultureInfo.InvariantCulture);
@@ -142,9 +146,13 @@ namespace project4.Controllers
 						{
 							consecutiveDays++;
 						}
+						if (startDate.Day == currentDate.Day && startDate.Month == currentDate.Month && startDate.Year == currentDate.Year)
+						{
+							consecutiveDays++;
+						}
 					}
 				}
-				if (check == 1)
+				else
 				{
 					consecutiveDays++;
 				}
@@ -202,7 +210,7 @@ namespace project4.Controllers
 							select a).OrderByDescending(x => x.totalscore).ToList();
 				int index = temp.FindIndex(x => x.Code == code);
 				int checkExits = listResult.FindIndex(x => x.position == index + 1);
-				if (checkExits == -1 && index < 3)
+				if (checkExits == -1 && index < 3 && index > -1)
 				{
 					ItemResult item = new ItemResult()
 					{

@@ -52,13 +52,13 @@ namespace project4.Controllers
 
 				int id_max = check != null ? check.ID + 1 : 1;
 
-				string dataFlutter = item.CodeLesson;
-				string[] parts = dataFlutter.Split('_');
-				string CodeLesson = parts[1];
+				//string dataFlutter = item.CodeLesson;
+				//string[] parts = dataFlutter.Split('_');
+				//string CodeLesson = parts[1];
 
 				History itemm = new History()
 				{
-					Code = "H_" + CodeLesson + "_" + id_max,
+					Code = "H_" + id_max,
 					LessonCode = item.CodeLesson,
 					IsCorrect = item.IsCorrect,
 					UserCode = item.UserCode,

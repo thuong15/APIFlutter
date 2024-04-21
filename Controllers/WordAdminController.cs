@@ -26,16 +26,16 @@ namespace project4.Controllers
                 var checkName = _context.Word.FirstOrDefault(x => x.IsDeleted == false && x.NameEN == model.nameEn && x.NameVN == model.nameVn);
                 if (checkName == null)
                 {
-                    string dataFlutter = model.codeLesson;
-                    string[] parts = dataFlutter.Split('_');
-                    string CodeLesson = parts[1];
+                    //string dataFlutter = model.codeLesson;
+                    //string[] parts = dataFlutter.Split('_');
+                    //string CodeLesson = parts[1];
 
                     var check = _context.Word.OrderByDescending(x => x.ID).FirstOrDefault();
 
                     int id_max = (int)(check != null ? check.ID + 1 : 1);
                     Word word = new Word
                     {
-                        Code = "W_" + CodeLesson + "_" + id_max,
+                        Code = "W_" + id_max,
                         LessonCode = model.codeLesson,
                         NameEN = model.nameEn,
                         NameVN = model.nameVn,
